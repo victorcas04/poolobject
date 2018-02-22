@@ -45,7 +45,7 @@ public class ReusablePoolTest {
 		//fail("Not yet implemented");
 		pool = ReusablePool.getInstance();
 		//assert pool = null;
-		assertNull(pool);
+		assertNotNull(pool);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class ReusablePoolTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assert re1 != null;
+		assertNotNull(re1);
 		
 	}
 
@@ -79,7 +79,7 @@ public class ReusablePoolTest {
 			e.printStackTrace();
 		}
 		try {
-			assert pool.acquireReusable() != null;
+			assertNotNull(pool.acquireReusable());
 		} catch (NotFreeInstanceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
