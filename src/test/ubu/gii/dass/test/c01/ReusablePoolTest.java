@@ -44,7 +44,8 @@ public class ReusablePoolTest {
 	public void testGetInstance() {
 		//fail("Not yet implemented");
 		pool = ReusablePool.getInstance();
-		assert pool == null;
+		//assert pool = null;
+		assertNull(pool);
 	}
 
 	/**
@@ -77,7 +78,12 @@ public class ReusablePoolTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		try {
+			assert pool.acquireReusable() != null;
+		} catch (NotFreeInstanceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
