@@ -60,9 +60,5 @@ public final class ReusablePool{
 			throw(new DuplicatedInstanceException());
 		}
 	}
-
-	public int r() {
-		return reusables.size();
-	}
 	
 } 

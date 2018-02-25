@@ -46,6 +46,8 @@ public class ReusablePoolTest {
 	public void testGetInstance() {
 		ReusablePool poolIns = ReusablePool.getInstance();
 		assertNotNull(poolIns);
+		
+		//Se adquiere la instancia de la clase pool
 	}
 	
 	/**
@@ -59,9 +61,11 @@ public class ReusablePoolTest {
 		Reusable re1 = poolIns.acquireReusable();
 		assertNotNull(re1);
 		poolIns.releaseReusable(re1);
+		
+		//Se adquiere un objeto del pool
 	}
 
-	@Test//(expected = NotFreeInstanceException.class)
+	@Test
 	public void testNotEnoughReusables() throws DuplicatedInstanceException, NotFreeInstanceException{
 		ReusablePool poolIns = ReusablePool.getInstance();
 		Reusable re1 = null, re2 = null, re3 = null;
@@ -101,6 +105,17 @@ public class ReusablePoolTest {
 		poolIns.releaseReusable(re3);
 		
 		//Se obtienen dos objetos, y como no quedan más libres se libera uno para volver a coger otro.
+	}
+	
+	@Test(expected = DuplicatedInstanceException.class)
+	public void testNotReusablesToRelease() throws DuplicatedInstanceException, NotFreeInstanceException {
+		ReusablePool poolIns = ReusablePool.getInstance();
+		Reusable re1 = null;
+		re1 = poolIns.acquireReusable();
+		poolIns.releaseReusable(re1);
+		poolIns.releaseReusable(re1);
+		
+		//Se intenta liberar un objeto cuando no hay ninguno en uso
 	}
 
 
