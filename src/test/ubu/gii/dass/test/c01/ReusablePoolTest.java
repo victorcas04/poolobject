@@ -17,7 +17,7 @@ import ubu.gii.dass.c01.Reusable;
 import ubu.gii.dass.c01.ReusablePool;
 
 /**
- * @author Víctor de Castro Hurtado
+ * @author Victor de Castro Hurtado
  *
  */
 public class ReusablePoolTest {
@@ -40,17 +40,19 @@ public class ReusablePoolTest {
 	}
 
 	/**
+	 * Se adquiere la instancia de la clase pool.
+	 * 
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#getInstance()}.
 	 */
 	@Test
 	public void testGetInstance() {
 		ReusablePool poolIns = ReusablePool.getInstance();
 		assertNotNull(poolIns);
-		
-		//Se adquiere la instancia de la clase pool
 	}
 	
 	/**
+	 * Se adquiere un objeto reusable del pool.
+	 * 
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#acquireReusable()}.
 	 * @throws NotFreeInstanceException 
 	 * @throws DuplicatedInstanceException 
@@ -61,10 +63,16 @@ public class ReusablePoolTest {
 		Reusable re1 = poolIns.acquireReusable();
 		assertNotNull(re1);
 		poolIns.releaseReusable(re1);
-		
-		//Se adquiere un objeto del pool
 	}
 
+	/**
+	 * Se intentan adquirir 3 objetos cuando el pool solo tiene 2.
+	 * 
+	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#acquireReusable()}.
+	 * @throws DuplicatedInstanceException
+	 * @throws NotFreeInstanceException
+	 */
+	
 	@Test
 	public void testNotEnoughReusables() throws DuplicatedInstanceException, NotFreeInstanceException{
 		ReusablePool poolIns = ReusablePool.getInstance();
@@ -81,11 +89,11 @@ public class ReusablePoolTest {
 		assertNull(re3);
 		poolIns.releaseReusable(re1);
 		poolIns.releaseReusable(re2);
-		
-		//Se intentan adquirir 3 objetos cuando el pool sólo tiene 2
 	}
 	
 	/**
+	 * Se obtienen dos objetos, y como no quedan mas libres se libera uno para volver a coger otro.
+	 * 
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
 	 * @throws NotFreeInstanceException 
 	 * @throws DuplicatedInstanceException 
@@ -103,9 +111,15 @@ public class ReusablePoolTest {
 		assertNotNull(re3);
 		poolIns.releaseReusable(re2);
 		poolIns.releaseReusable(re3);
-		
-		//Se obtienen dos objetos, y como no quedan más libres se libera uno para volver a coger otro.
 	}
+	
+	/**
+	 * Se intenta liberar un objeto cuando no hay ninguno en uso.
+	 * 
+	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
+	 * @throws DuplicatedInstanceException
+	 * @throws NotFreeInstanceException
+	 */
 	
 	@Test(expected = DuplicatedInstanceException.class)
 	public void testNotReusablesToRelease() throws DuplicatedInstanceException, NotFreeInstanceException {
@@ -114,8 +128,6 @@ public class ReusablePoolTest {
 		re1 = poolIns.acquireReusable();
 		poolIns.releaseReusable(re1);
 		poolIns.releaseReusable(re1);
-		
-		//Se intenta liberar un objeto cuando no hay ninguno en uso
 	}
 
 
