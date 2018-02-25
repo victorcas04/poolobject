@@ -5,6 +5,8 @@ package ubu.gii.dass.test.c01;
 
 import static org.junit.Assert.*;
 
+import java.util.Vector;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,19 +17,19 @@ import ubu.gii.dass.c01.Reusable;
 import ubu.gii.dass.c01.ReusablePool;
 
 /**
- * @author alumno
+ * @author Víctor de Castro Hurtado
  *
  */
 public class ReusablePoolTest {
-
-	ReusablePool pool;
-	Reusable re1;
+	
+	private ReusablePool poolIns;
 	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+
 	}
 
 	/**
@@ -42,48 +44,64 @@ public class ReusablePoolTest {
 	 */
 	@Test
 	public void testGetInstance() {
-		//fail("Not yet implemented");
-		pool = ReusablePool.getInstance();
-		//assert pool = null;
-		assertNotNull(pool);
+		ReusablePool poolIns = ReusablePool.getInstance();
+		assertNotNull(poolIns);
 	}
-
+	
 	/**
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#acquireReusable()}.
+	 * @throws NotFreeInstanceException 
+	 * @throws DuplicatedInstanceException 
 	 */
 	@Test
-	public void testAcquireReusable() {
-		//fail("Not yet implemented");
-		testGetInstance();
-		try {
-			re1 = pool.acquireReusable();
-		} catch (NotFreeInstanceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void testAcquireReusable() throws NotFreeInstanceException, DuplicatedInstanceException {
+		ReusablePool poolIns = ReusablePool.getInstance();
+		Reusable re1 = poolIns.acquireReusable();
 		assertNotNull(re1);
-		
+		poolIns.releaseReusable(re1);
 	}
 
+	@Test//(expected = NotFreeInstanceException.class)
+	public void testNotEnoughReusables() throws DuplicatedInstanceException, NotFreeInstanceException{
+		ReusablePool poolIns = ReusablePool.getInstance();
+		Reusable re1 = null, re2 = null, re3 = null;
+		
+		re1 = poolIns.acquireReusable();
+		re2 = poolIns.acquireReusable();
+		
+		try {
+			re3 = poolIns.acquireReusable();
+		} catch (NotFreeInstanceException e) {
+			
+		}
+		assertNull(re3);
+		poolIns.releaseReusable(re1);
+		poolIns.releaseReusable(re2);
+		
+		//Se intentan adquirir 3 objetos cuando el pool sólo tiene 2
+	}
+	
 	/**
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
+	 * @throws NotFreeInstanceException 
+	 * @throws DuplicatedInstanceException 
 	 */
+	
 	@Test
-	public void testReleaseReusable() {
-		//fail("Not yet implemented");
-		testAcquireReusable();
-		try {
-			pool.releaseReusable(re1);
-		} catch (DuplicatedInstanceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			assertNotNull(pool.acquireReusable());
-		} catch (NotFreeInstanceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void testReleaseReusable() throws NotFreeInstanceException, DuplicatedInstanceException {
+		ReusablePool poolIns = ReusablePool.getInstance();		
+		Reusable re1 = null, re2 = null, re3 = null;
+
+		re1 = poolIns.acquireReusable();
+		re2 = poolIns.acquireReusable();
+		poolIns.releaseReusable(re1);
+		re3 = poolIns.acquireReusable();
+		assertNotNull(re3);
+		poolIns.releaseReusable(re2);
+		poolIns.releaseReusable(re3);
+		
+		//Se obtienen dos objetos, y como no quedan más libres se libera uno para volver a coger otro.
 	}
+
 
 }
